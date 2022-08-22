@@ -1,6 +1,9 @@
 const service = require("./reservations.service.js");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+/**
+ * Formats the date into a useable string
+ */
 function asDateString(date) {
   return `${date.getFullYear().toString(10)}-${(date.getMonth() + 1)
     .toString(10)
@@ -8,6 +11,10 @@ function asDateString(date) {
 
 };
 
+/**
+ * Async function to check if reservation exists
+ * Calls reservations.service.read
+ */
 async function resExists(req, res, next) {
 
   const resId = req.params.reservation_id;
@@ -23,6 +30,9 @@ async function resExists(req, res, next) {
 
 };
 
+/**
+ * Function to check if the reservation inputs are valid or not
+ */
 function validRes(req, res, next) {
 
   if (!req.body.data) {
@@ -87,6 +97,9 @@ function validRes(req, res, next) {
 
 };
 
+/**
+ * Function to check if reservation is made in the correct timeframe
+ */
 function validFuture(req, res, next) {
 
   const errorArray = [];
@@ -131,6 +144,9 @@ function validFuture(req, res, next) {
 
 };
 
+/**
+ * Function to check if the status of the reservation is valid or not
+ */
 function validStatus(req, res, next) {
 
   const errorArray = [];
@@ -152,6 +168,9 @@ function validStatus(req, res, next) {
 
 };
 
+/**
+ * Function to check if reservation is made during the open hours of the restaurant
+ */
 function validTime(req, res, next) {
 
   const errorArray = [];
@@ -194,6 +213,10 @@ function validTime(req, res, next) {
 
 };
 
+/**
+ * Async function to create a new reservation
+ * Calls reservation.service.create
+ */
 async function create(req, res) {
 
   const newRes = res.locals.reservation;
@@ -203,6 +226,10 @@ async function create(req, res) {
 
 };
 
+/**
+ * Async function to edit an existing reservation
+ * Calls reservation.service.edit
+ */
 async function edit(req, res) {
 
   let resId = req.params.reservation_id;
@@ -215,6 +242,12 @@ async function edit(req, res) {
 
 };
 
+/**
+ * Async function to list reservations based on the given date -
+ * - or search for a reservation based on mobile_number if there is no date
+ * Calls reservation.service.list
+ * Calls reservation.service.search
+ */
 async function list(req, res) {
 
   if (req.query.date) {
@@ -231,17 +264,24 @@ async function list(req, res) {
 
 }
 
+/**
+ * Function to read reservations
+ */
 function read(req, res) {
   res.status(200).json({ data: res.locals.reservation });
 }
 
+/**
+ * Async function to update the status of an existing reservation
+ * Calls reservation.service.updateStatus
+ */
 async function updateStatus(req, res) {
   let resId = req.params.reservation_id;
   resId = Number(resId);
 
   const newStatus = req.body.data.status;
 
-  const updatedReservation = await service.update(resId, newStatus);
+  const updatedReservation = await service.updateStatus(resId, newStatus);
 
   res.status(200).json({ data: updatedReservation[0] });
 }

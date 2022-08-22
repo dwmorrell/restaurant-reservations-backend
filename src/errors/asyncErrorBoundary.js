@@ -1,3 +1,8 @@
+
+/**
+ * Defines the async error boundary function
+ * @param {delegate, defaultStatus} 
+ */
 function asyncErrorBoundary(delegate, defaultStatus) {
     return (request, response, next) => {
         Promise.resolve()

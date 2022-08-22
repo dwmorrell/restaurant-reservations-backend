@@ -2,6 +2,9 @@ const service = require("./tables.service.js");
 const reservationService = require("../reservations/reservations.service.js");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
+/**
+ * Function to check if a table is valid or not
+ */
 function validTable(req, res, next) {
 
     if (!req.body.data) {
@@ -31,6 +34,11 @@ function validTable(req, res, next) {
     return next({ status: 400, message: `One or more inputs is invalid: ${errorArray.join(', ')} `});
 };
 
+/**
+ * Async function to validate if a table can be seated or not with the provided inputs
+ * Calls tables.service.read
+ * Calls reservations.service.read via reservationService.read
+ */
 async function validSeating(req, res, next) {
 
     if (!req.body.data) {
@@ -75,6 +83,10 @@ async function validSeating(req, res, next) {
     return next({ status: 400, message: `One or more inputs is invalid: ${errorArray.join(', ')} `});
 };
 
+/**
+ * Async function to find if a table is currently occupied or not
+ * Calls tables.service.read
+ */
 async function isOccupied(req, res, next) {
 
     const tableId = req.params.table_id;
@@ -95,6 +107,10 @@ async function isOccupied(req, res, next) {
     return next();
 };
 
+/**
+ * Async function to create a new table
+ * Calls tables.service.create
+ */
 async function create(req, res) {
 
     const table = res.locals.table;
@@ -104,6 +120,10 @@ async function create(req, res) {
     res.status(201).json({ data: newTable });
 };
 
+/**
+ * Async function to list current tables
+ * Calls tables.service.list
+ */
 async function list(req, res) {
 
     let data = [];
@@ -113,20 +133,28 @@ async function list(req, res) {
     res.json({ data });
 };
 
+/**
+ * Async function to seat a reservation at a table
+ * Calls tables.service.seatUpdate
+ */
 async function seat(req, res) {
-
+    
     const tableId = Number(req.params.table_id);
     const resId = req.body.data.reservation_id;
     const update = await service.seatUpdate(resId, tableId);
 
-    res.status(200).json({ data: update[0] });
+    res.status(200).json({ data: update });
 };
 
+/**
+ * Async function to clear a table that is finished eating
+ * Calls tables.service.clear
+ */
 async function clear(req, res) {
 
     const tableId = Number(req.params.table_id);
-    const resId = req.body.data.reservation_id;
-    const clearedTable = await service.clear(resId, tableId);
+    const resId = res.locals.table.reservation_id;
+    const clearedTable = await service.clear(tableId, resId);
 
     res.status(200).json({ data: clearedTable });
 
