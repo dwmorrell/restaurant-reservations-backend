@@ -52,18 +52,19 @@ async function validSeating(req, res, next) {
     const tableCapacity = table.capacity;
     const tableResId = table.reservation_id;
     const resId = req.body.data.reservation_id;
-
+ 
     if (!resId) {
         return next({ status: 400, message: 'No reservation_id was recieved.' });
     }
 
     const reservation = await reservationService.read(resId);
-    const peopleInParty = reservation.people;
-
+    
     if (!reservation) {
-        return next({ status: 404, message: `No reservation found with with ID: ${resId}. `});
+        return next({ status: 404, message: `No reservation found with ID: ${resId}. `});
     }
 
+    const peopleInParty = reservation.people;
+    
     if (reservation.status === 'seated') {
         return next({ status: 400, message: `Reservation with ID ${resId} has already been seated.`});
     }
@@ -79,6 +80,8 @@ async function validSeating(req, res, next) {
     if (errorArray.length === 0) {
         return next();
     }
+   
+    
 
     return next({ status: 400, message: `One or more inputs is invalid: ${errorArray.join(', ')} `});
 };
@@ -93,7 +96,7 @@ async function isOccupied(req, res, next) {
     const table = await service.read(tableId);
 
     if (!table) {
-        return next({ status: 400, message: `Table: ${tableId} does not exist.`});
+        return next({ status: 404, message: `Table: ${tableId} does not exist.`});
     }
 
     const tableResId = table.reservation_id;

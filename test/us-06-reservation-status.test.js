@@ -269,7 +269,7 @@ describe("US-06 - Reservation status", () => {
 
       expect(finishResponse.body.error).toBeUndefined();
       expect(finishResponse.status).toBe(200);
-
+      console.log(reservationOne.reservation_date, 123)
       const reservationsResponse = await request(app)
         .get(
           `/reservations?date=${asDateString(reservationOne.reservation_date)}`

@@ -127,9 +127,9 @@ function validFuture(req, res, next) {
   // Check for reservation dates in the past
 
   if (reservationYear < currentYear) {
-    errorArray.push(`Your reservation must be made for the current ${currentYear} year.`);
+    errorArray.push(`Your reservation must be made for the current ${currentYear} year or a year in the future.`);
   } else if (reservationYear === currentYear && reservationMonth < currentMonth) {
-    errorArray.push(`Your reservation must be made during the current ${currentMonth} month.`);
+    errorArray.push(`Your reservation must be made during the current ${currentMonth} month or month in the future.`);
   } else if (reservationMonth === currentMonth && reservationDay < currentDay) {
     errorArray.push(`Your reservation must be made on the current day or a day in the future.`);
   } else if (reservationMonth === currentMonth && reservationDay === currentDay) {
@@ -220,9 +220,10 @@ function validTime(req, res, next) {
 async function create(req, res) {
 
   const newRes = res.locals.reservation;
-  const createdRes = await service.create(newRes);
-
-  res.status(200).json({ data: createdRes });
+  const data = await service.create(newRes);
+  data[0].people = Number(data[0].people)
+  
+  res.status(201).json({ data: data[0] });
 
 };
 
@@ -236,9 +237,9 @@ async function edit(req, res) {
   resId = Number(resId);
   const editedRes = req.body.data;
 
-  const updatedRes = await service.edit(resId, editedRes);
+  await service.edit(resId, editedRes);
 
-  res.status(200).json({ data: updatedRes[0] });
+  res.status(200).json({ data: editedRes });
 
 };
 
@@ -251,7 +252,7 @@ async function edit(req, res) {
 async function list(req, res) {
 
   if (req.query.date) {
-    const { date } = req.query;
+    const { date } = req.query
     let data = [];
     data = await service.list(date);
     res.json({ data });
@@ -289,7 +290,7 @@ async function updateStatus(req, res) {
 module.exports = {
   create: [validRes, validFuture, validTime, asyncErrorBoundary(create)],
   edit: [asyncErrorBoundary(resExists), validRes, validFuture, validTime, asyncErrorBoundary(edit)],
-  list: asyncErrorBoundary(list),
+  list: [asyncErrorBoundary(list)],
   read: [asyncErrorBoundary(resExists), read],
   update: [asyncErrorBoundary(resExists), validStatus, asyncErrorBoundary(updateStatus)],
 };
