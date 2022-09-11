@@ -13,7 +13,7 @@ const tablesRouter = require("./tables/tables.router");
 
 const app = express();
 
-app.use(cors({ origin: "https://restaurant-reservations-app.herokuapp.com" }));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
 
