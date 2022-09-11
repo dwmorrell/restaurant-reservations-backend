@@ -129,10 +129,7 @@ async function create(req, res) {
  */
 async function list(req, res) {
 
-    let data = [];
-
-    data = await service.list();
-
+    const data = await service.list();
     res.json({ data });
 };
 
