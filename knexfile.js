@@ -14,7 +14,10 @@ const path = require("path");
 //   DEBUG,
 // } = process.env;
 
- DATABASE_URL = "postgres://qzohricj:SWJUtSrkW8Jt6v-JdXNwqhZKk4z6y5jQ@heffalump.db.elephantsql.com/qzohricj"
+DATABASE_URL="postgres://qzohricj:SWJUtSrkW8Jt6v-JdXNwqhZKk4z6y5jQ@heffalump.db.elephantsql.com/qzohricj"
+DATABASE_URL_DEVELOPMENT="postgres://qzohricj:SWJUtSrkW8Jt6v-JdXNwqhZKk4z6y5jQ@heffalump.db.elephantsql.com/qzohricj"
+DATABASE_URL_TEST="postgres://qzohricj:SWJUtSrkW8Jt6v-JdXNwqhZKk4z6y5jQ@heffalump.db.elephantsql.com/qzohricj"
+DATABASE_URL_PREVIEW="postgres://qzohricj:SWJUtSrkW8Jt6v-JdXNwqhZKk4z6y5jQ@heffalump.db.elephantsql.com/qzohricj"
 
 module.exports = {
   development: {
