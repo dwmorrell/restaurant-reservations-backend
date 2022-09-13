@@ -108,6 +108,7 @@ function validFuture(req, res, next) {
 
   currentYear = Number(currentYear);
   currentMonth = Number(currentMonth);
+  console.log(currentDay)
   currentDay = Number(currentDay);
   console.log(currentDay)
   const resDate = res.locals.reservation.reservation_date;
