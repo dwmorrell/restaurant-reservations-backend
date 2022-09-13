@@ -107,7 +107,7 @@ function validFuture(req, res, next) {
   let [ currentYear, currentMonth, currentDay ] = currentDate.split('-');
   currentYear = Number(currentYear);
   currentMonth = Number(currentMonth);
-  currentDay = Number(currentDay -1);
+  currentDay = Number(currentDay);
   const resDate = res.locals.reservation.reservation_date;
   let [ reservationYear, reservationMonth, reservationDay ] = resDate.split('-');
 
@@ -183,8 +183,10 @@ function validTime(req, res, next) {
   const currentDate = new Date();
   const currentHours = currentDate.getHours();
   const currentMinutes = currentDate.getMinutes();
-
+  console.log(currentHours, currentDate)
+  
   // convert current time to mintues
+ // currentHours = currentHours -12;
   const currentTimeInMin = (currentHours * 60) + currentMinutes;
   const reservationTime = res.locals.reservation.reservation_time;
   let [ reservationHour, reservationMinute ] = reservationTime.split(":");
