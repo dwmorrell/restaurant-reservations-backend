@@ -111,6 +111,7 @@ function validFuture(req, res, next) {
   currentDay = Number(currentDay);
 
   const resDate = res.locals.reservation.reservation_date;
+  console.log(resDate)
   let [ reservationYear, reservationMonth, reservationDay ] = resDate.split('-');
 
   reservationYear = Number(reservationYear);
@@ -118,7 +119,9 @@ function validFuture(req, res, next) {
   reservationDay = Number(reservationDay);
 
   resDateObj = new Date(resDate);
+  console.log(resDateObj)
   const day = resDateObj.getDay() +1;
+  console.log(day)
 
   if (day === 2) {
     errorArray.push('Restaurant is closed on Tuesdays');
