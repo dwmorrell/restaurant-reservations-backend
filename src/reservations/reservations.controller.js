@@ -105,14 +105,10 @@ function validFuture(req, res, next) {
   const errorArray = [];
   const currentDate = asDateString(new Date());
   let [ currentYear, currentMonth, currentDay ] = currentDate.split('-');
-
   currentYear = Number(currentYear);
   currentMonth = Number(currentMonth);
-  console.log(currentDay)
-  currentDay = Number(currentDay);
-  console.log(currentDay)
+  currentDay = Number(currentDay -1);
   const resDate = res.locals.reservation.reservation_date;
-  console.log(resDate)
   let [ reservationYear, reservationMonth, reservationDay ] = resDate.split('-');
 
   reservationYear = Number(reservationYear);
@@ -120,9 +116,7 @@ function validFuture(req, res, next) {
   reservationDay = Number(reservationDay);
 
   resDateObj = new Date(resDate);
-  console.log(resDateObj)
   const day = resDateObj.getDay() +1;
-  console.log(day)
 
   if (day === 2) {
     errorArray.push('Restaurant is closed on Tuesdays');
