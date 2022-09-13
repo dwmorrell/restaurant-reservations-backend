@@ -184,10 +184,10 @@ function validTime(req, res, next) {
   const currentHours = currentDate.getHours();
   const currentMinutes = currentDate.getMinutes();
   
+  // Accounting for backend server timezone
+  const currentHoursMinusSix = currentHours -6;
   // convert current time to mintues
-  currentHours = currentHours -6;
-  console.log(currentHours)
-  const currentTimeInMin = (currentHours * 60) + currentMinutes;
+  const currentTimeInMin = (currentHoursMinusSix * 60) + currentMinutes;
   const reservationTime = res.locals.reservation.reservation_time;
   let [ reservationHour, reservationMinute ] = reservationTime.split(":");
 
