@@ -109,7 +109,7 @@ function validFuture(req, res, next) {
   currentYear = Number(currentYear);
   currentMonth = Number(currentMonth);
   currentDay = Number(currentDay);
-
+  console.log(currentDay)
   const resDate = res.locals.reservation.reservation_date;
   console.log(resDate)
   let [ reservationYear, reservationMonth, reservationDay ] = resDate.split('-');
@@ -120,7 +120,7 @@ function validFuture(req, res, next) {
 
   resDateObj = new Date(resDate);
   console.log(resDateObj)
-  const day = resDateObj.getDay();
+  const day = resDateObj.getDay() +1;
   console.log(day)
 
   if (day === 2) {
