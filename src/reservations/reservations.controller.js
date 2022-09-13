@@ -120,7 +120,7 @@ function validFuture(req, res, next) {
 
   resDateObj = new Date(resDate);
   console.log(resDateObj)
-  const day = resDateObj.getDay() +1;
+  const day = resDateObj.getDay();
   console.log(day)
 
   if (day === 2) {
