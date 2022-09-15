@@ -51,6 +51,7 @@ function validRes(req, res, next) {
   const errorArray = [];
   const dateFormat = /\d\d\d\d-\d\d-\d\d/;
   const timeFormat = /\d\d:\d\d/;
+  const mobileNumberFormat = /^(?:(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9])\s*\)|([2-9]1[02-9]|[2-9][02-8]1|[2-9][02-8][02-9]))\s*(?:[.-]\s*)?)?([2-9]1[02-9]|[2-9][02-9]1|[2-9][02-9]{2})\s*(?:[.-]\s*)?([0-9]{4})(?:\s*(?:#|x\.?|ext\.?|extension)\s*(\d+))?$/;
 
   if (!reservation.first_name || reservation.first_name === '') {
     errorArray.push('first_name');
@@ -60,7 +61,7 @@ function validRes(req, res, next) {
     errorArray.push('last_name');
   }
 
-  if (!reservation.mobile_number || reservation.mobile_number === '') {
+  if (!reservation.mobile_number || reservation.mobile_number === '' || !reservation.mobile_number.match(mobileNumberFormat)) {
     errorArray.push('mobile_number');
   }
 
@@ -183,11 +184,9 @@ function validTime(req, res, next) {
   const currentDate = new Date();
   const currentHours = currentDate.getHours();
   const currentMinutes = currentDate.getMinutes();
-  
-  // Accounting for backend server timezone
-  const currentHoursMinusSix = currentHours -6;
+
   // convert current time to mintues
-  const currentTimeInMin = (currentHoursMinusSix * 60) + currentMinutes;
+  const currentTimeInMin = (currentHours * 60) + currentMinutes;
   const reservationTime = res.locals.reservation.reservation_time;
   let [ reservationHour, reservationMinute ] = reservationTime.split(":");
 
@@ -196,7 +195,6 @@ function validTime(req, res, next) {
 
   // convert reservation time to mintues
   const reservationTimeInMin = (reservationHour * 60) + reservationMinute;
-
   if(reservationTimeInMin < reservationsOpen) {
     errorArray.push(`The restaurant does not open before 10:30 AM.  Please select another time.`);
   } else if(reservationTimeInMin > reservationsClose) {
